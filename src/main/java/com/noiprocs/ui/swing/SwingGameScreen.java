@@ -10,18 +10,21 @@ import com.noiprocs.ui.console.sprite.ConsoleSprite;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import static com.noiprocs.ui.console.ConsoleUIConfig.HEIGHT;
 import static com.noiprocs.ui.console.ConsoleUIConfig.WIDTH;
 
 public class SwingGameScreen implements GameScreenInterface {
+    private static final boolean USE_SQUARE_FONT = false;
     private final char[][] map = new char[HEIGHT][WIDTH];
     private GameContext gameContext;
+    public final JFrame jframe = new JFrame();
     public final JTextArea jTextArea = new JTextArea();
 
     public SwingGameScreen() {
-        JFrame jframe = new JFrame();
         jframe.setSize(440, 700);
         jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jframe.setVisible(true);
@@ -31,6 +34,8 @@ public class SwingGameScreen implements GameScreenInterface {
         jTextArea.setFont(new Font("Monaco", Font.PLAIN, 12));
         jTextArea.setBackground(Color.BLACK);
         jTextArea.setForeground(Color.WHITE);
+
+        if (USE_SQUARE_FONT) this.useSquareFont();
     }
 
     @Override
@@ -59,8 +64,9 @@ public class SwingGameScreen implements GameScreenInterface {
         renderableSpriteList.sort(
                 (u, v) -> {
                     Model uModel = u.getModel();
-                    if (uModel instanceof PlayerModel) return 1;
                     Model vModel = v.getModel();
+                    if (uModel.id.equals(gameContext.username)) return 1;
+                    if (vModel.id.equals(gameContext.username)) return -1;
                     return Integer.compare(uModel.posY, vModel.posY);
                 }
         );
@@ -93,6 +99,7 @@ public class SwingGameScreen implements GameScreenInterface {
     private void updateMap(int posX, int posY, char[][] texture, int offsetX, int offsetY) {
         for (int i = 0; i < texture.length; ++i) {
             for (int j = 0; j < texture[0].length; ++j) {
+                if (texture[i][j] == 0) continue;
                 int x = posX + i - offsetX;
                 int y = posY + j - offsetY;
                 if (x >= 0 && x < HEIGHT && y >= 0 && y < WIDTH) map[x][y] = texture[i][j];
@@ -130,5 +137,15 @@ public class SwingGameScreen implements GameScreenInterface {
             }
         }
         return sb.toString();
+    }
+
+    private void useSquareFont() {
+        try {
+            Font font = Font.createFont(Font.TRUETYPE_FONT, new File("src/main/resources/square.ttf"));
+            jTextArea.setFont(font.deriveFont(12f));
+            jframe.setSize(750, 580);
+        } catch (FontFormatException | IOException e) {
+            e.printStackTrace();
+        }
     }
 }
