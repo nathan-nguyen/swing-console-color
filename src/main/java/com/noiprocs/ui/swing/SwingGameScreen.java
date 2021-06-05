@@ -25,13 +25,13 @@ public class SwingGameScreen implements GameScreenInterface {
     public final JTextArea jTextArea = new JTextArea();
 
     public SwingGameScreen() {
-        jframe.setSize(440, 700);
+        jframe.setSize(440, 660);
         jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jframe.setVisible(true);
 
         jframe.add(jTextArea);
         jTextArea.setEditable(false);
-        jTextArea.setFont(new Font("Monaco", Font.PLAIN, 12));
+        jTextArea.setFont(new Font("monospaced", Font.PLAIN, 12));
         jTextArea.setBackground(Color.BLACK);
         jTextArea.setForeground(Color.WHITE);
 
