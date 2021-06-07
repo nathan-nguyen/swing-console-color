@@ -50,12 +50,13 @@ public class SwingGameScreen implements GameScreenInterface {
         // Only render when playerModel is existing
         if (playerModel == null) return;
 
-        // Get list of objects not far from player
-        List<RenderableSprite> renderableSpriteList = gameContext.spriteManager.getRenderableObjectListWithinRange(
-                playerModel.posX,
-                playerModel.posY,
-                Config.RENDER_RANGE
-        );
+        // Get list of visible objects not far from player
+        List<RenderableSprite> renderableSpriteList = gameContext.spriteManager
+                .getVisibleRenderableObjectListWithinRange(
+                        playerModel.posX,
+                        playerModel.posY,
+                        Config.RENDER_RANGE
+                );
 
         /* Render order:
          * - PlayerModel renders last.

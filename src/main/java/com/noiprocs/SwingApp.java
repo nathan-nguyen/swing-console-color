@@ -11,7 +11,7 @@ import java.awt.event.KeyEvent;
 import java.util.HashSet;
 import java.util.Set;
 
-public class App {
+public class SwingApp {
     public static void main(String[] args) {
         String platform = args[0];
         String username = args[1];
