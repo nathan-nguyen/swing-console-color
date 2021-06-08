@@ -5,6 +5,7 @@ import com.noiprocs.core.config.Config;
 import com.noiprocs.core.graphics.GameScreenInterface;
 import com.noiprocs.core.graphics.RenderableSprite;
 import com.noiprocs.core.model.Model;
+import com.noiprocs.core.model.item.Item;
 import com.noiprocs.core.model.mob.character.PlayerModel;
 import com.noiprocs.ui.console.sprite.ConsoleSprite;
 
@@ -25,7 +26,7 @@ public class SwingGameScreen implements GameScreenInterface {
     public final JTextArea jTextArea = new JTextArea();
 
     public SwingGameScreen() {
-        jframe.setSize(440, 660);
+        jframe.setSize(440, 670);
         jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         jframe.setVisible(true);
 
@@ -88,7 +89,7 @@ public class SwingGameScreen implements GameScreenInterface {
         }
 
         // Render map
-        jTextArea.setText(printMap());
+        jTextArea.setText(printMap(playerModel));
     }
 
     private void clearMap() {
@@ -108,10 +109,23 @@ public class SwingGameScreen implements GameScreenInterface {
         }
     }
 
-    private String printMap() {
+    private String getHudString(PlayerModel playerModel) {
+        StringBuilder inventorySb = new StringBuilder();
+        for (Item item: playerModel.inventory) {
+            if (item == null) continue;
+            inventorySb.append(item.name).append(": ").append(item.amount).append(' ');
+        }
+        return playerModel.id + " - [" + playerModel.posX + ", " + playerModel.posY +
+                "] - Inventory: [" + inventorySb + ']';
+    }
+
+    private String printMap(PlayerModel playerModel) {
         System.out.print("\033[H\033[2J");
         System.out.flush();
+
         StringBuilder sb = new StringBuilder();
+        sb.append(getHudString(playerModel)).append('\n');
+
         for (int i = 0; i < map.length; ++i) {
             // Add top border
             if (i == 0) {
