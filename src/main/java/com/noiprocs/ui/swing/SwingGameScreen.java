@@ -1,5 +1,6 @@
 package com.noiprocs.ui.swing;
 
+import com.noiprocs.core.graphics.RenderableSprite;
 import com.noiprocs.core.model.mob.character.PlayerModel;
 import com.noiprocs.ui.console.ConsoleGameScreen;
 
@@ -29,7 +30,10 @@ public class SwingGameScreen extends ConsoleGameScreen {
 
     @Override
     public void render(int delta) {
-        PlayerModel playerModel = (PlayerModel) gameContext.modelManager.getModel(gameContext.username);
+        RenderableSprite playerSprite = gameContext.spriteManager.renderableSpriteMap.get(gameContext.username);
+        if (playerSprite == null) return;
+
+        PlayerModel playerModel = (PlayerModel) playerSprite.getModel();
 
         // Only render when playerModel is existing
         if (playerModel == null) return;

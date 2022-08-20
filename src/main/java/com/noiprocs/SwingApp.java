@@ -1,8 +1,6 @@
 package com.noiprocs;
 
 import com.noiprocs.core.GameContext;
-import com.noiprocs.core.graphics.HitboxManagerInterface;
-import com.noiprocs.ui.console.ConsoleHitboxManager;
 import com.noiprocs.ui.console.ConsoleSpriteManager;
 import com.noiprocs.ui.swing.SwingGameScreen;
 
@@ -25,9 +23,6 @@ public class SwingApp {
 
         SwingGameScreen gameScreen = new SwingGameScreen();
         gameContext.setGameScreen(gameScreen);
-
-        HitboxManagerInterface hitboxManager = new ConsoleHitboxManager();
-        gameContext.setHitboxManager(hitboxManager);
 
         // Start a separate thread for game, main thread is for control
         Runnable task = gameContext::run;
