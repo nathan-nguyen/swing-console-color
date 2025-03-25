@@ -18,7 +18,7 @@ public class SwingApp {
         int port = Integer.parseInt(args[4]);
 
         // Initialize gameContext
-        GameContext gameContext = new GameContext(platform, username, type, hostname, port);
+        GameContext gameContext = GameContext.build(platform, username, type, hostname, port);
         gameContext.setSpriteManager(new ConsoleSpriteManager());
 
         SwingGameScreen gameScreen = new SwingGameScreen();
