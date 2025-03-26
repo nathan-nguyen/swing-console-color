@@ -1,6 +1,7 @@
 package com.noiprocs;
 
 import com.noiprocs.core.GameContext;
+import com.noiprocs.core.config.Config;
 import com.noiprocs.ui.console.ConsoleSpriteManager;
 import com.noiprocs.ui.swing.SwingGameScreen;
 
@@ -16,6 +17,8 @@ public class SwingApp {
         String type = args[2];
         String hostname = args[3];
         int port = Integer.parseInt(args[4]);
+
+        Config.CLEAR_SCREEN = false;
 
         // Initialize gameContext
         GameContext gameContext = GameContext.build(platform, username, type, hostname, port);
