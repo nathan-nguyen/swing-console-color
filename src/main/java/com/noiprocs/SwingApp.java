@@ -2,6 +2,7 @@ package com.noiprocs;
 
 import com.noiprocs.core.GameContext;
 import com.noiprocs.core.config.Config;
+import com.noiprocs.ui.console.ConsoleHitboxManager;
 import com.noiprocs.ui.console.ConsoleSpriteManager;
 import com.noiprocs.ui.swing.SwingGameScreen;
 
@@ -20,16 +21,18 @@ public class SwingApp {
 
         Config.CLEAR_SCREEN = false;
 
-        // Initialize gameContext
-        GameContext gameContext = GameContext.build(platform, username, type, hostname, port);
-        gameContext.setSpriteManager(new ConsoleSpriteManager());
-
         SwingGameScreen gameScreen = new SwingGameScreen();
-        gameContext.setGameScreen(gameScreen);
+
+        // Initialize gameContext
+        GameContext gameContext = GameContext.build(
+                platform, username, type, hostname, port,
+                new ConsoleHitboxManager(),
+                new ConsoleSpriteManager(),
+                gameScreen
+        );
 
         // Start a separate thread for game, main thread is for control
-        Runnable task = gameContext::run;
-        Thread thread = new Thread(task);
+        Thread thread = new Thread(gameContext::run);
         thread.start();
 
         gameScreen.jTextArea.addKeyListener(
