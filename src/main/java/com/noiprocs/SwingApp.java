@@ -2,8 +2,8 @@ package com.noiprocs;
 
 import com.noiprocs.core.GameContext;
 import com.noiprocs.core.config.Config;
-import com.noiprocs.ui.console.ConsoleHitboxManager;
-import com.noiprocs.ui.console.ConsoleSpriteManager;
+import com.noiprocs.ui.console.hitbox.ConsoleHitboxManager;
+import com.noiprocs.ui.console.sprite.ConsoleSpriteManager;
 import com.noiprocs.ui.swing.SwingGameScreen;
 
 import java.awt.event.KeyAdapter;
