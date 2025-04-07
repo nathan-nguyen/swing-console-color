@@ -1,6 +1,7 @@
 package com.noiprocs.ui.swing;
 
 import com.noiprocs.core.graphics.RenderableSprite;
+import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.mob.character.PlayerModel;
 import com.noiprocs.ui.console.ConsoleGameScreen;
 
@@ -30,16 +31,12 @@ public class SwingGameScreen extends ConsoleGameScreen {
 
     @Override
     public void render(int delta) {
-        RenderableSprite playerSprite = gameContext.spriteManager.renderableSpriteMap.get(gameContext.username);
-        if (playerSprite == null) return;
-
-        PlayerModel playerModel = (PlayerModel) playerSprite.getModel();
-
+        Model playerModel = gameContext.modelManager.getModel(gameContext.username);
         // Only render when playerModel is existing
         if (playerModel == null) return;
 
         // Render map
-        jTextArea.setText(this.getScreenContentInString(playerModel));
+        jTextArea.setText(this.getScreenContentInString((PlayerModel) playerModel));
     }
 
     private void useSquareFont() {
