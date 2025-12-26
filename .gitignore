@@ -122,3 +122,6 @@ Thumbs.db
 ## Save files
 *.dat
 
+## Environment variables
+.env
+
