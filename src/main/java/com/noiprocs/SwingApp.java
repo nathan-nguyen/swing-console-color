@@ -35,7 +35,7 @@ public class SwingApp {
         Thread thread = new Thread(gameContext::run);
         thread.start();
 
-        gameScreen.jTextArea.addKeyListener(
+        gameScreen.jTextPane.addKeyListener(
                 new KeyAdapter() {
                     private final Set<Character> keyPressedSet = new HashSet<>();
 
