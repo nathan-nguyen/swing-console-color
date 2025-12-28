@@ -31,6 +31,8 @@ public class SwingGameScreen extends ConsoleGameScreen {
         COLOR_CHAR_MAP.put('p', new Color(188, 63, 188));  // Purple
         COLOR_CHAR_MAP.put('c', new Color(17, 168, 205));  // Cyan
         COLOR_CHAR_MAP.put('w', Color.WHITE);
+        COLOR_CHAR_MAP.put('o', new Color(135, 95, 0));    // Brown
+        COLOR_CHAR_MAP.put('l', new Color(144, 238, 144)); // Light Green
     }
 
     public SwingGameScreen() {
