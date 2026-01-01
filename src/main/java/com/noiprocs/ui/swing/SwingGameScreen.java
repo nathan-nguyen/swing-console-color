@@ -6,6 +6,7 @@ import static com.noiprocs.ui.console.ConsoleUIConfig.WIDTH;
 import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.mob.character.PlayerModel;
 import com.noiprocs.ui.console.ConsoleGameScreen;
+import com.noiprocs.ui.console.util.ColorMapper;
 
 import javax.swing.*;
 import javax.swing.text.*;
@@ -23,16 +24,10 @@ public class SwingGameScreen extends ConsoleGameScreen {
     // Color character to AWT Color mapping
     private static final Map<Character, Color> COLOR_CHAR_MAP = new HashMap<>();
     static {
-        COLOR_CHAR_MAP.put('k', Color.BLACK);
-        COLOR_CHAR_MAP.put('r', new Color(205, 49, 49));   // Red
-        COLOR_CHAR_MAP.put('g', new Color(13, 188, 121));  // Green
-        COLOR_CHAR_MAP.put('y', new Color(229, 229, 16));  // Yellow
-        COLOR_CHAR_MAP.put('b', new Color(36, 114, 200));  // Blue
-        COLOR_CHAR_MAP.put('p', new Color(188, 63, 188));  // Purple
-        COLOR_CHAR_MAP.put('c', new Color(17, 168, 205));  // Cyan
-        COLOR_CHAR_MAP.put('w', Color.WHITE);
-        COLOR_CHAR_MAP.put('o', new Color(135, 95, 0));    // Brown
-        COLOR_CHAR_MAP.put('l', new Color(144, 238, 144)); // Light Green
+        for (Map.Entry<Character, ColorMapper.RGB> entry: ColorMapper.COLOR_MAP.entrySet()) {
+            ColorMapper.RGB rgb = entry.getValue();
+            COLOR_CHAR_MAP.put(entry.getKey(), new Color(rgb.r, rgb.g, rgb.b));
+        }
     }
 
     public SwingGameScreen() {
