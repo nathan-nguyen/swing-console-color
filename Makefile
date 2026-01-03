@@ -14,7 +14,7 @@ PORT ?= 8080
 # Maven command
 MVN = mvn
 
-.PHONY: help build clean test run run-client run-server compile package
+.PHONY: help build clean test run run-client run-server compile package format
 
 # Default target
 help:
@@ -22,6 +22,7 @@ help:
 	@echo "  make build       - Clean and compile the project"
 	@echo "  make compile     - Compile without cleaning"
 	@echo "  make test        - Run tests"
+	@echo "  make format      - Format code using Spotless"
 	@echo "  make run         - Run with current settings (TYPE=$(TYPE))"
 	@echo "  make run-client  - Run as client"
 	@echo "  make run-server  - Run as server"
@@ -43,6 +44,9 @@ compile:
 test:
 	$(MVN) test
 
+format:
+	$(MVN) spotless:apply
+
 clean:
 	$(MVN) clean
 
@@ -58,3 +62,7 @@ run-client:
 
 run-server:
 	$(MAKE) run TYPE=server
+
+run-client-console:
+	$(MVN) exec:java -Dexec.mainClass="com.noiprocs.App" \
+		-Dexec.args="$(PLATFORM) $(USERNAME) client $(HOSTNAME) $(PORT)"
