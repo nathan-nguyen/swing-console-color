@@ -1,7 +1,7 @@
 package com.noiprocs;
 
 import com.noiprocs.core.GameContext;
-import com.noiprocs.core.config.Config;
+import com.noiprocs.core.common.Config;
 import com.noiprocs.core.control.InputCommand;
 import com.noiprocs.ui.console.hitbox.ConsoleHitboxManager;
 import com.noiprocs.ui.console.sprite.ConsoleSpriteManager;
@@ -45,11 +45,22 @@ public class SwingApp {
 
           @Override
           public void keyPressed(KeyEvent event) {
-            // Handle chest UI close with escape key (client-side only)
-            if (event.getKeyCode() == KeyEvent.VK_ESCAPE
-                && gameScreen.hud.inventoryInteractionHud.isChestOpen()) {
-              gameScreen.hud.inventoryInteractionHud.close();
-              // Don't send escape to server when closing chest UI
+            // Handle inventory HUD interactions (client-side only)
+            if (gameScreen.hud.inventoryInteractionHud.isChestOpen()) {
+              if (event.getKeyCode() == KeyEvent.VK_ESCAPE) { // ESC
+                gameScreen.hud.inventoryInteractionHud.close();
+                return;
+              }
+              if (event.getKeyCode() == KeyEvent.VK_ENTER) { // Enter
+                gameScreen.hud.inventoryInteractionHud.transferSelectedItem();
+                return;
+              }
+              char ch = event.getKeyChar();
+              if (ch == 'w' || ch == 'a' || ch == 's' || ch == 'd') {
+                gameScreen.hud.inventoryInteractionHud.handleNavigation(ch);
+                return;
+              }
+              // Ignore other keys when HUD is open
               return;
             }
 
