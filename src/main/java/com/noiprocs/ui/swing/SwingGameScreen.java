@@ -60,83 +60,37 @@ public class SwingGameScreen extends ConsoleGameScreen {
       // Create a new StyledDocument for this render
       DefaultStyledDocument newDocument = new DefaultStyledDocument();
 
-      // 1. Add HUD and top border
-      StringBuilder header = new StringBuilder();
-      header.append(getHudString(playerModel)).append('\n');
-      for (int j = 0; j < WIDTH + 2; j++) {
-        header.append('-');
-      }
-      header.append('\n');
+      // 1. Add player info HUD
       newDocument.insertString(
-          newDocument.getLength(), header.toString(), getOrCreateStyle(newDocument, Color.WHITE));
+          newDocument.getLength(),
+          hud.getPlayerInfo(playerModel) + "\n",
+          getOrCreateStyle(newDocument, Color.WHITE));
 
-      // 2. Render all rows - batch entire segments across all rows
-      StringBuilder textSegment = new StringBuilder();
-      Color segmentColor = null;
+      // 2. Build map lines as array of strings
+      String[] mapLines = buildMapLines();
 
-      for (int i = 0; i < HEIGHT; i++) {
-        // Process left border with current segment if color matches, otherwise flush and start new
-        if (segmentColor != null && !segmentColor.equals(Color.WHITE)) {
+      // 3. Check for overlay content
+      String[] overlayLines = hud.getOverlayContent(playerModel);
+
+      // 4. Render each line with appropriate colors
+      for (int i = 0; i < mapLines.length; ++i) {
+        String line = mapLines[i];
+
+        // Use overlay line if available
+        if (overlayLines != null && i < overlayLines.length && !overlayLines[i].isEmpty()) {
           newDocument.insertString(
               newDocument.getLength(),
-              textSegment.toString(),
-              getOrCreateStyle(newDocument, segmentColor));
-          textSegment.setLength(0);
-          segmentColor = null;
-        }
-        if (segmentColor == null) {
-          segmentColor = Color.WHITE;
-        }
-        textSegment.append('|');
-
-        // Process row content
-        for (int j = 0; j < WIDTH; j++) {
-          char ch = map[i][j] == 0 ? ' ' : map[i][j];
-          char colorChar = colorMap[i][j];
-
-          Color color =
-              (colorChar != 0) ? COLOR_CHAR_MAP.getOrDefault(colorChar, Color.WHITE) : Color.WHITE;
-
-          // If color changed, flush current segment
-          if (segmentColor != null && !color.equals(segmentColor)) {
-            newDocument.insertString(
-                newDocument.getLength(),
-                textSegment.toString(),
-                getOrCreateStyle(newDocument, segmentColor));
-            textSegment.setLength(0);
-            segmentColor = color;
-          }
-
-          textSegment.append(ch);
-        }
-
-        // Right border and newline - flush if color doesn't match white
-        if (segmentColor != null && !segmentColor.equals(Color.WHITE)) {
+              overlayLines[i] + "\n",
+              getOrCreateStyle(newDocument, Color.WHITE));
+        } else if (i == 0 || i == mapLines.length - 1) {
+          // Top or bottom border - render as white
           newDocument.insertString(
-              newDocument.getLength(),
-              textSegment.toString(),
-              getOrCreateStyle(newDocument, segmentColor));
-          textSegment.setLength(0);
-          segmentColor = Color.WHITE;
+              newDocument.getLength(), line + "\n", getOrCreateStyle(newDocument, Color.WHITE));
+        } else {
+          // Map content line with colors
+          renderMapLineWithColors(newDocument, line, i - 1);
         }
-        textSegment.append("|\n");
       }
-
-      // Flush any remaining segment
-      if (textSegment.length() > 0) {
-        newDocument.insertString(
-            newDocument.getLength(),
-            textSegment.toString(),
-            getOrCreateStyle(newDocument, segmentColor));
-      }
-
-      // 3. Add bottom border
-      StringBuilder footer = new StringBuilder();
-      for (int j = 0; j < WIDTH + 2; j++) {
-        footer.append('-');
-      }
-      newDocument.insertString(
-          newDocument.getLength(), footer.toString(), getOrCreateStyle(newDocument, Color.WHITE));
 
       // Atomically replace the document (no flashing!)
       SwingUtilities.invokeLater(
@@ -146,6 +100,87 @@ public class SwingGameScreen extends ConsoleGameScreen {
     } catch (BadLocationException e) {
       e.printStackTrace();
     }
+  }
+
+  private String[] buildMapLines() {
+    String[] lines = new String[HEIGHT + 2]; // +2 for top and bottom borders
+    int lineIndex = 0;
+
+    // Top border
+    StringBuilder borderSb = new StringBuilder();
+    for (int j = 0; j < WIDTH + 2; j++) {
+      borderSb.append('-');
+    }
+    lines[lineIndex++] = borderSb.toString();
+
+    // Map rows
+    for (int i = 0; i < HEIGHT; i++) {
+      StringBuilder lineSb = new StringBuilder();
+      lineSb.append('|');
+      for (int j = 0; j < WIDTH; j++) {
+        char ch = map[i][j] == 0 ? ' ' : map[i][j];
+        lineSb.append(ch);
+      }
+      lineSb.append('|');
+      lines[lineIndex++] = lineSb.toString();
+    }
+
+    // Bottom border
+    lines[lineIndex] = borderSb.toString();
+
+    return lines;
+  }
+
+  private void renderMapLineWithColors(DefaultStyledDocument document, String line, int mapRow)
+      throws BadLocationException {
+    StringBuilder textSegment = new StringBuilder();
+    Color segmentColor = Color.WHITE;
+
+    for (int i = 0; i < line.length(); i++) {
+      char ch = line.charAt(i);
+
+      // Border characters are always white
+      if (ch == '|') {
+        if (textSegment.length() > 0) {
+          document.insertString(
+              document.getLength(),
+              textSegment.toString(),
+              getOrCreateStyle(document, segmentColor));
+          textSegment.setLength(0);
+        }
+        segmentColor = Color.WHITE;
+        textSegment.append(ch);
+        continue;
+      }
+
+      // Map content - check color
+      int mapCol = i - 1; // Account for left border
+      if (mapCol >= 0 && mapCol < WIDTH && mapRow >= 0 && mapRow < HEIGHT) {
+        char colorChar = colorMap[mapRow][mapCol];
+        Color color =
+            (colorChar != 0) ? COLOR_CHAR_MAP.getOrDefault(colorChar, Color.WHITE) : Color.WHITE;
+
+        if (!color.equals(segmentColor)) {
+          if (textSegment.length() > 0) {
+            document.insertString(
+                document.getLength(),
+                textSegment.toString(),
+                getOrCreateStyle(document, segmentColor));
+            textSegment.setLength(0);
+          }
+          segmentColor = color;
+        }
+      }
+
+      textSegment.append(ch);
+    }
+
+    // Flush remaining segment
+    if (textSegment.length() > 0) {
+      document.insertString(
+          document.getLength(), textSegment.toString(), getOrCreateStyle(document, segmentColor));
+    }
+    document.insertString(document.getLength(), "\n", getOrCreateStyle(document, Color.WHITE));
   }
 
   private Style getOrCreateStyle(StyledDocument document, Color color) {
