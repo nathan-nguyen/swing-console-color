@@ -45,6 +45,14 @@ public class SwingApp {
 
           @Override
           public void keyPressed(KeyEvent event) {
+            // Handle chest UI close with escape key (client-side only)
+            if (event.getKeyCode() == KeyEvent.VK_ESCAPE
+                && gameScreen.hud.inventoryInteractionHud.isChestOpen()) {
+              gameScreen.hud.inventoryInteractionHud.close();
+              // Don't send escape to server when closing chest UI
+              return;
+            }
+
             keyPressedSet.add(event.getKeyChar());
             gameContext.controlManager.processInput(
                 new InputCommand(gameContext.username, event.getKeyChar()));
