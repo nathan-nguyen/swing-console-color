@@ -11,6 +11,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.swing.*;
 import javax.swing.text.*;
@@ -70,17 +71,17 @@ public class SwingGameScreen extends ConsoleGameScreen {
       String[] mapLines = buildMapLines();
 
       // 3. Check for overlay content
-      String[] overlayLines = hud.getOverlayContent(playerModel);
+      List<String> overlayLines = hud.getOverlayContent(playerModel);
 
       // 4. Render each line with appropriate colors
       for (int i = 0; i < mapLines.length; ++i) {
         String line = mapLines[i];
 
         // Use overlay line if available
-        if (overlayLines != null && i < overlayLines.length && !overlayLines[i].isEmpty()) {
+        if (overlayLines != null && i < overlayLines.size()) {
           newDocument.insertString(
               newDocument.getLength(),
-              overlayLines[i] + "\n",
+              overlayLines.get(i) + "\n",
               getOrCreateStyle(newDocument, Color.WHITE));
         } else if (i == 0 || i == mapLines.length - 1) {
           // Top or bottom border - render as white
