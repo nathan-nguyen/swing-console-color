@@ -45,6 +45,13 @@ public class SwingApp {
 
           @Override
           public void keyPressed(KeyEvent event) {
+            // Map arrow keys to w/a/s/d for HUD navigation
+            Character arrowKey = null;
+            if (event.getKeyCode() == KeyEvent.VK_UP) arrowKey = 'w';
+            else if (event.getKeyCode() == KeyEvent.VK_DOWN) arrowKey = 's';
+            else if (event.getKeyCode() == KeyEvent.VK_LEFT) arrowKey = 'a';
+            else if (event.getKeyCode() == KeyEvent.VK_RIGHT) arrowKey = 'd';
+
             // Handle crafting HUD interactions (client-side only)
             if (gameScreen.hud.craftingHud.isOpen()) {
               if (event.getKeyCode() == KeyEvent.VK_ESCAPE) { // ESC
@@ -55,9 +62,9 @@ public class SwingApp {
                 gameScreen.hud.craftingHud.craftSelectedItem();
                 return;
               }
-              char ch = event.getKeyChar();
-              if (ch == 'w' || ch == 's') {
-                gameScreen.hud.craftingHud.handleNavigation(ch);
+              // Handle arrow keys for navigation
+              if (arrowKey != null && (arrowKey == 'w' || arrowKey == 's')) {
+                gameScreen.hud.craftingHud.handleNavigation(arrowKey);
                 return;
               }
               // Ignore other keys when HUD is open
@@ -73,9 +80,9 @@ public class SwingApp {
                 gameScreen.hud.inventoryInteractionHud.transferSelectedItem();
                 return;
               }
-              char ch = event.getKeyChar();
-              if (ch == 'w' || ch == 'a' || ch == 's' || ch == 'd') {
-                gameScreen.hud.inventoryInteractionHud.handleNavigation(ch);
+              // Handle arrow keys for navigation
+              if (arrowKey != null) {
+                gameScreen.hud.inventoryInteractionHud.handleNavigation(arrowKey);
                 return;
               }
               // Ignore other keys when HUD is open
