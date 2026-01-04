@@ -45,7 +45,25 @@ public class SwingApp {
 
           @Override
           public void keyPressed(KeyEvent event) {
-            // Handle inventory HUD interactions (client-side only)
+            // Handle crafting HUD interactions (client-side only)
+            if (gameScreen.hud.craftingHud.isOpen()) {
+              if (event.getKeyCode() == KeyEvent.VK_ESCAPE) { // ESC
+                gameScreen.hud.craftingHud.close();
+                return;
+              }
+              if (event.getKeyCode() == KeyEvent.VK_ENTER) { // Enter
+                gameScreen.hud.craftingHud.craftSelectedItem();
+                return;
+              }
+              char ch = event.getKeyChar();
+              if (ch == 'w' || ch == 's') {
+                gameScreen.hud.craftingHud.handleNavigation(ch);
+                return;
+              }
+              // Ignore other keys when HUD is open
+              return;
+            }
+
             if (gameScreen.hud.inventoryInteractionHud.isChestOpen()) {
               if (event.getKeyCode() == KeyEvent.VK_ESCAPE) { // ESC
                 gameScreen.hud.inventoryInteractionHud.close();
@@ -61,6 +79,15 @@ public class SwingApp {
                 return;
               }
               // Ignore other keys when HUD is open
+              return;
+            }
+
+            char ch = event.getKeyChar();
+
+            // Check for 'e' key to open crafting HUD
+            if (ch == 'e') {
+              gameScreen.hud.inventoryInteractionHud.close(); // Close other HUD
+              gameScreen.hud.craftingHud.open();
               return;
             }
 
