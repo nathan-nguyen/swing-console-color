@@ -1,8 +1,9 @@
 package com.noiprocs;
 
 import com.noiprocs.core.GameContext;
-import com.noiprocs.core.common.Config;
-import com.noiprocs.core.control.InputCommand;
+import com.noiprocs.core.control.command.InputCommand;
+import com.noiprocs.core.network.KryoPool;
+import com.noiprocs.ui.console.ConsoleUIConfig;
 import com.noiprocs.ui.console.hitbox.ConsoleHitboxManager;
 import com.noiprocs.ui.console.sprite.ConsoleSpriteManager;
 import com.noiprocs.ui.swing.SwingGameScreen;
@@ -12,6 +13,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class SwingApp {
+  static {
+    KryoPool.registerPackage(
+        "com.noiprocs.core.control.command",
+        "com.noiprocs.core.model",
+        "com.noiprocs.gameplay.model");
+  }
+
   public static void main(String[] args) {
     String platform = args[0];
     String username = args[1];
@@ -19,7 +27,7 @@ public class SwingApp {
     String hostname = args[3];
     int port = Integer.parseInt(args[4]);
 
-    Config.CLEAR_SCREEN = false;
+    ConsoleUIConfig.CLEAR_SCREEN = false;
 
     SwingGameScreen gameScreen = new SwingGameScreen();
 
