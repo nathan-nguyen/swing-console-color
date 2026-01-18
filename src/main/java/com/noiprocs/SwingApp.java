@@ -66,13 +66,42 @@ public class SwingApp {
                 gameScreen.hud.craftingHud.close();
                 return;
               }
+              if (event.getKeyCode() == KeyEvent.VK_TAB) { // TAB to toggle to equipment HUD
+                gameScreen.hud.craftingHud.close();
+                gameScreen.hud.equipmentHud.open();
+                return;
+              }
               if (event.getKeyCode() == KeyEvent.VK_ENTER) { // Enter
                 gameScreen.hud.craftingHud.craftSelectedItem();
                 return;
               }
               // Handle arrow keys for navigation
-              if (arrowKey != null && (arrowKey == 'w' || arrowKey == 's')) {
+              if (arrowKey != null) {
                 gameScreen.hud.craftingHud.handleNavigation(arrowKey);
+                return;
+              }
+              // Ignore other keys when HUD is open
+              return;
+            }
+
+            // Handle equipment HUD interactions (client-side only)
+            if (gameScreen.hud.equipmentHud.isOpen()) {
+              if (event.getKeyCode() == KeyEvent.VK_ESCAPE) { // ESC
+                gameScreen.hud.equipmentHud.close();
+                return;
+              }
+              if (event.getKeyCode() == KeyEvent.VK_TAB) { // TAB to toggle to crafting HUD
+                gameScreen.hud.equipmentHud.close();
+                gameScreen.hud.craftingHud.open();
+                return;
+              }
+              if (event.getKeyCode() == KeyEvent.VK_ENTER) { // Enter
+                gameScreen.hud.equipmentHud.handleEquipmentAction();
+                return;
+              }
+              // Handle arrow keys for navigation
+              if (arrowKey != null) {
+                gameScreen.hud.equipmentHud.handleNavigation(arrowKey);
                 return;
               }
               // Ignore other keys when HUD is open
@@ -99,10 +128,9 @@ public class SwingApp {
 
             char ch = event.getKeyChar();
 
-            // Check for 'e' key to open crafting HUD
+            // Check for 'e' key to open equipment HUD
             if (ch == 'e') {
-              gameScreen.hud.inventoryInteractionHud.close(); // Close other HUD
-              gameScreen.hud.craftingHud.open();
+              gameScreen.hud.equipmentHud.open();
               return;
             }
 

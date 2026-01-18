@@ -42,6 +42,9 @@ public class SwingGameScreen extends ConsoleGameScreen {
     jTextPane.setBackground(Color.BLACK);
     jTextPane.setForeground(Color.WHITE);
 
+    // Disable focus traversal keys so TAB can be captured by KeyListener
+    jTextPane.setFocusTraversalKeysEnabled(false);
+
     if (USE_SQUARE_FONT) this.useSquareFont();
   }
 
