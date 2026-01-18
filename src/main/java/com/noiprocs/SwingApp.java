@@ -117,6 +117,11 @@ public class SwingApp {
                 gameScreen.hud.inventoryInteractionHud.transferSelectedItem();
                 return;
               }
+              char ch = event.getKeyChar();
+              if (ch == 'e' || ch == 'E') {
+                gameScreen.hud.inventoryInteractionHud.handleEquipmentAction();
+                return;
+              }
               // Handle arrow keys for navigation
               if (arrowKey != null) {
                 gameScreen.hud.inventoryInteractionHud.handleNavigation(arrowKey);
