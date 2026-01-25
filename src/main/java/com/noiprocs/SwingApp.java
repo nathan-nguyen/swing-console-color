@@ -104,6 +104,18 @@ public class SwingApp {
                 gameScreen.hud.equipmentHud.handleNavigation(arrowKey);
                 return;
               }
+              // Handle number keys 1-4 to swap inventory slots (only when inventory is selected)
+              if (!gameScreen.hud.equipmentHud.isEquipmentSelected()) {
+                char ch = event.getKeyChar();
+                if (ch >= '1' && ch <= '4') {
+                  int targetSlot = ch - '1'; // Convert '1'-'4' to 0-3
+                  int currentSlot = gameScreen.hud.equipmentHud.getSelectedSlot();
+                  if (targetSlot != currentSlot) {
+                    gameContext.controlManager.swapInventorySlots(currentSlot, targetSlot);
+                  }
+                  return;
+                }
+              }
               // Ignore other keys when HUD is open
               return;
             }
