@@ -2,7 +2,6 @@ package com.noiprocs;
 
 import com.noiprocs.core.GameContext;
 import com.noiprocs.core.control.command.InputCommand;
-import com.noiprocs.core.network.KryoPool;
 import com.noiprocs.ui.console.ConsoleUIConfig;
 import com.noiprocs.ui.console.hitbox.ConsoleHitboxManager;
 import com.noiprocs.ui.console.sprite.ConsoleSpriteManager;
@@ -13,13 +12,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class SwingApp {
-  static {
-    KryoPool.registerPackage(
-        "com.noiprocs.core.control.command",
-        "com.noiprocs.core.model",
-        "com.noiprocs.gameplay.model");
-  }
-
   public static void main(String[] args) {
     String platform = args[0];
     String username = args[1];
