@@ -4,13 +4,6 @@
 # Export variables for sub-make calls
 export
 
-# Configuration variables (defaults can be overridden in .env or command line)
-PLATFORM ?= pc
-USERNAME ?= noiprocs
-TYPE ?= client
-HOSTNAME ?= localhost
-PORT ?= 8080
-
 # Maven command
 MVN = mvn
 
