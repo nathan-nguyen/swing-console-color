@@ -1,8 +1,5 @@
 package com.noiprocs.ui.swing;
 
-import static com.noiprocs.ui.console.ConsoleUIConfig.HEIGHT;
-import static com.noiprocs.ui.console.ConsoleUIConfig.WIDTH;
-
 import com.noiprocs.core.model.Model;
 import com.noiprocs.core.model.mob.character.PlayerModel;
 import com.noiprocs.ui.console.ConsoleGameScreen;
@@ -31,7 +28,8 @@ public class SwingGameScreen extends ConsoleGameScreen {
     }
   }
 
-  public SwingGameScreen() {
+  public SwingGameScreen(int height, int width, int renderRange) {
+    super(height, width, renderRange);
     jframe.setSize(440, 690);
     jframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     jframe.setVisible(true);
@@ -107,21 +105,21 @@ public class SwingGameScreen extends ConsoleGameScreen {
   }
 
   private String[] buildMapLines() {
-    String[] lines = new String[HEIGHT + 2]; // +2 for top and bottom borders
+    String[] lines = new String[height + 2]; // +2 for top and bottom borders
     int lineIndex = 0;
 
     // Top border
     StringBuilder borderSb = new StringBuilder();
-    for (int j = 0; j < WIDTH + 2; j++) {
+    for (int j = 0; j < width + 2; j++) {
       borderSb.append('-');
     }
     lines[lineIndex++] = borderSb.toString();
 
     // Map rows
-    for (int i = 0; i < HEIGHT; i++) {
+    for (int i = 0; i < height; i++) {
       StringBuilder lineSb = new StringBuilder();
       lineSb.append('|');
-      for (int j = 0; j < WIDTH; j++) {
+      for (int j = 0; j < width; j++) {
         char ch = map[i][j] == 0 ? ' ' : map[i][j];
         lineSb.append(ch);
       }
@@ -159,7 +157,7 @@ public class SwingGameScreen extends ConsoleGameScreen {
 
       // Map content - check color
       int mapCol = i - 1; // Account for left border
-      if (mapCol >= 0 && mapCol < WIDTH && mapRow >= 0 && mapRow < HEIGHT) {
+      if (mapCol >= 0 && mapCol < width && mapRow >= 0 && mapRow < height) {
         char colorChar = colorMap[mapRow][mapCol];
         Color color =
             (colorChar != 0) ? COLOR_CHAR_MAP.getOrDefault(colorChar, Color.WHITE) : Color.WHITE;
