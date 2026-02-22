@@ -21,7 +21,7 @@ public class SwingApp {
 
     ConsoleUIConfig.CLEAR_SCREEN = false;
 
-    SwingGameScreen gameScreen = new SwingGameScreen(40, 60, 120);
+    SwingGameScreen gameScreen = new SwingGameScreen(40, 60, 12000);
 
     // Initialize gameContext
     GameContext gameContext =
