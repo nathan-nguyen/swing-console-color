@@ -16,6 +16,9 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
+    <!-- Directory where all JSON files live at runtime (written by console-color build).
+         Must be set via -D flag, wired from JSON_EXTRA_OUTPUT_DIR in .env through the Makefile. -->
+    <json.output.dir/>
   </properties>
 
   <dependencies>
@@ -93,6 +96,17 @@
       </plugins>
     </pluginManagement>
     <plugins>
+      <!-- Add json.output.dir to the classpath so the app finds JSON configs written by console-color -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>3.1.0</version>
+        <configuration>
+          <additionalClasspathElements>
+            <additionalClasspathElement>${json.output.dir}</additionalClasspathElement>
+          </additionalClasspathElements>
+        </configuration>
+      </plugin>
       <!-- Code formatter -->
       <plugin>
         <groupId>com.diffplug.spotless</groupId>

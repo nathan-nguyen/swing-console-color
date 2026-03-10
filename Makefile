@@ -4,6 +4,10 @@
 # Export variables for sub-make calls
 export
 
+# Directory where all JSON files live at runtime (written by the console-color build).
+# Must be set via JSON_EXTRA_OUTPUT_DIR in .env.
+MAVEN_ENV_ARGS = -Djson.output.dir=$(JSON_EXTRA_OUTPUT_DIR)
+
 # Maven command
 MVN = mvn
 
@@ -29,13 +33,13 @@ help:
 	@echo "Example: make run USERNAME=alice HOSTNAME=192.168.1.100 PORT=9090"
 
 build:
-	$(MVN) clean compile
+	$(MVN) clean compile $(MAVEN_ENV_ARGS)
 
 compile:
-	$(MVN) compile
+	$(MVN) compile $(MAVEN_ENV_ARGS)
 
 test:
-	$(MVN) test
+	$(MVN) test $(MAVEN_ENV_ARGS)
 
 format:
 	$(MVN) spotless:apply
@@ -44,11 +48,12 @@ clean:
 	$(MVN) clean
 
 package:
-	$(MVN) package
+	$(MVN) package $(MAVEN_ENV_ARGS)
 
 run:
 	$(MVN) exec:java -Dexec.mainClass="com.noiprocs.SwingApp" \
-		-Dexec.args="$(PLATFORM) $(USERNAME) $(TYPE) $(HOSTNAME) $(PORT)"
+		-Dexec.args="$(PLATFORM) $(USERNAME) $(TYPE) $(HOSTNAME) $(PORT)" \
+		$(MAVEN_ENV_ARGS)
 
 run-client:
 	$(MAKE) run TYPE=client
