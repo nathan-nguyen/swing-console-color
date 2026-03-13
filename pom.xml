@@ -16,9 +16,6 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
-    <!-- Directory where all JSON files live at runtime (written by console-color build).
-         Must be set via -D flag, wired from JSON_EXTRA_OUTPUT_DIR in .env through the Makefile. -->
-    <json.output.dir/>
   </properties>
 
   <dependencies>

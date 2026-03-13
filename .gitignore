@@ -120,6 +120,7 @@ Thumbs.db
 *.psd
 
 ## Save files
+world/
 *.dat
 
 ## Environment variables

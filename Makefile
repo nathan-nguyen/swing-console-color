@@ -11,7 +11,7 @@ MAVEN_ENV_ARGS = -Djson.output.dir=$(JSON_EXTRA_OUTPUT_DIR)
 # Maven command
 MVN = mvn
 
-.PHONY: help build clean test run run-client run-server compile package format
+.PHONY: help build clean test run run-client run-server run-standalone compile package format
 
 # Default target
 help:
@@ -23,6 +23,7 @@ help:
 	@echo "  make run         - Run with current settings (TYPE=$(TYPE))"
 	@echo "  make run-client  - Run as client"
 	@echo "  make run-server  - Run as server"
+	@echo "  make run-standalone - Run in standalone mode"
 	@echo "  make package     - Package the application as JAR"
 	@echo "  make clean       - Clean build artifacts"
 	@echo ""
@@ -61,6 +62,10 @@ run-client:
 run-server:
 	$(MAKE) run TYPE=server
 
+run-standalone:
+	$(MAKE) run TYPE=standalone
+
 run-client-console:
 	$(MVN) exec:java -Dexec.mainClass="com.noiprocs.App" \
-		-Dexec.args="$(PLATFORM) $(USERNAME) client $(HOSTNAME) $(PORT)"
+		-Dexec.args="$(PLATFORM) $(USERNAME) client $(HOSTNAME) $(PORT)" \
+		$(MAVEN_ENV_ARGS)
